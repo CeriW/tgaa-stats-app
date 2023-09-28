@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, SafeAreaView, StatusBar } from 'react-native';
 
 export default function App() {
   const [dataList, setDataList] = useState([]);
@@ -18,12 +18,15 @@ export default function App() {
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.h1}>The Great Ace Attorney Chronicles</Text>
-      <Text style={styles.h2}>player achievements</Text>
-      <AchievementList dataList={dataList} />
-      {/* <Text style={{ color: '#fff' }}>{JSON.stringify(dataList)}</Text> */}
-    </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={colours.gold} />
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.h1}>The Great Ace Attorney Chronicles</Text>
+        <Text style={styles.h2}>player achievements</Text>
+        <AchievementList dataList={dataList} />
+        {/* <Text style={{ color: '#fff' }}>{JSON.stringify(dataList)}</Text> */}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
