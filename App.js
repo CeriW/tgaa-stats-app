@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, SafeAreaView, StatusBar, Pressable } from 'react-native';
 
 export default function App() {
   const [dataList, setDataList] = useState([]);
@@ -76,22 +76,29 @@ const AchievementList = ({ dataList }) => {
 };
 
 const AchievementCard = ({ achievement }) => {
-  // const isHidden = (achievement.hidden > 0).toString();
+  const isHidden = achievement.hidden > 0;
+  const [showAchievement, toggleHiddenAchievement] = useState(!isHidden);
 
-  const backgroundPie = `linear-gradient(red 0%, red ${Math.round(achievement.percent)}%, green ${Math.round(
-    achievement.percent
-  )}%, green 100%)`;
-  console.log(backgroundPie);
+  const displayStyle = showAchievement ? null : { opacity: 0.25 };
+
+  const toggleCard = () => {
+    const toggle = isHidden ? !showAchievement : true;
+    toggleHiddenAchievement(toggle);
+  };
 
   return (
-    <View style={styles.achievementCard}>
-      <Image src={achievement.icon} style={{ width: 50, height: 50 }} />
-      <View style={{ flexShrink: 1, flexGrow: 1 }}>
-        <Text style={(styles.text, styles.h3)}>{achievement.displayName}</Text>
-        <Text style={styles.text}>{achievement.description}</Text>
+    <Pressable onPress={toggleCard}>
+      <View style={styles.achievementCard}>
+        <Image src={achievement.icon} style={{ width: 50, height: 50, ...displayStyle }} />
+        <View style={{ flexShrink: 1, flexGrow: 1 }}>
+          <Text style={(styles.text, styles.h3)}>
+            {showAchievement ? achievement.displayName : 'Hidden achievement'}
+          </Text>
+          <Text style={styles.text}>{showAchievement ? achievement.description : 'Click to reveal'}</Text>
+        </View>
+        <Text style={(styles.text, styles.percentMarker)}>{Math.round(achievement.percent)}%</Text>
       </View>
-      <Text style={(styles.text, styles.percentMarker)}>{Math.round(achievement.percent)}%</Text>
-    </View>
+    </Pressable>
   );
 };
 
@@ -103,13 +110,15 @@ const colours = {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colours.blue,
-    padding: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   h1: {
     fontSize: 30,
     fontWeight: 'bold',
     color: colours.gold,
     textAlign: 'center',
+    paddingTop: 30,
   },
   h2: {
     fontSize: 25,
