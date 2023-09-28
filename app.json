@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "tgaa-stats-app",
+    "slug": "tgaa-stats-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "tgaa-stats-app"
+}
