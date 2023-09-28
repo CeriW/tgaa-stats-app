@@ -24,7 +24,6 @@ export default function App() {
         <Text style={styles.h1}>The Great Ace Attorney Chronicles</Text>
         <Text style={styles.h2}>player achievements</Text>
         <AchievementList dataList={dataList} />
-        {/* <Text style={{ color: '#fff' }}>{JSON.stringify(dataList)}</Text> */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -67,7 +66,7 @@ const formatAchievements = async () => {
 
 const AchievementList = ({ dataList }) => {
   return (
-    <View style={{ paddingTop: 30 }}>
+    <View style={{ paddingTop: 30, paddingBottom: 30 }}>
       {dataList.map((item, index) => (
         <AchievementCard key={index} achievement={item} />
       ))}
@@ -125,7 +124,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
-    marginTop: 20,
   },
   h3: {
     fontSize: 20,
