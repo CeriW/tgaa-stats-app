@@ -63,10 +63,8 @@ const formatAchievements = async () => {
 };
 
 const AchievementList = ({ dataList }) => {
-  // console.log(dataList);
-
   return (
-    <View>
+    <View style={{ paddingTop: 30 }}>
       {dataList.map((item, index) => (
         <AchievementCard key={index} achievement={item} />
       ))}
@@ -77,13 +75,19 @@ const AchievementList = ({ dataList }) => {
 const AchievementCard = ({ achievement }) => {
   // const isHidden = (achievement.hidden > 0).toString();
 
+  const backgroundPie = `linear-gradient(red 0%, red ${Math.round(achievement.percent)}%, green ${Math.round(
+    achievement.percent
+  )}%, green 100%)`;
+  console.log(backgroundPie);
+
   return (
     <View style={styles.achievementCard}>
       <Image src={achievement.icon} style={{ width: 50, height: 50 }} />
-      <View>
+      <View style={{ flexShrink: 1, flexGrow: 1 }}>
         <Text style={(styles.text, styles.h3)}>{achievement.displayName}</Text>
         <Text style={styles.text}>{achievement.description}</Text>
       </View>
+      <Text style={(styles.text, styles.percentMarker)}>{Math.round(achievement.percent)}%</Text>
     </View>
   );
 };
@@ -96,6 +100,7 @@ const colours = {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colours.blue,
+    padding: 10,
   },
   h1: {
     fontSize: 30,
@@ -114,7 +119,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: colours.gold,
-    marginTop: 20,
   },
   achievementCard: {
     backgroundColor: '#000',
@@ -123,8 +127,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     alignItems: 'center',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 7,
   },
   text: {
     color: '#fff',
+  },
+  percentMarker: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    backgroundColor: colours.gold,
+    padding: 5,
+    borderRadius: 5,
   },
 });
