@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, SafeAreaView, StatusBar, Pressable } from 'react-native';
 
+import { getFormattedAchievements } from './data.js';
+
 export default function App() {
   const [dataList, setDataList] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await formatAchievements();
+        const result = await getFormattedAchievements();
         setDataList(result);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -28,41 +30,6 @@ export default function App() {
     </SafeAreaView>
   );
 }
-
-const steamGameID = 1158850;
-const apiKey = '9C744478D34930318FB5C67B3613E409';
-
-const apiAddresses = {
-  achievementNames: `https://corsproxy.io/?http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v0002/?key=${apiKey}&appid=${steamGameID}&l=english&format=json`,
-  achievementPercentages: `https://corsproxy.io/?http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=${steamGameID}&format=json`,
-};
-
-async function fetchData(apiUrl) {
-  try {
-    const response = await fetch(apiUrl);
-
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
-  }
-}
-
-const formatAchievements = async () => {
-  const info = await fetchData(apiAddresses.achievementNames);
-  const percentages = await fetchData(apiAddresses.achievementPercentages);
-
-  const formattedData = info.game.availableGameStats.achievements.map((item, index) => {
-    return { ...item, percent: percentages.achievementpercentages.achievements[index].percent };
-  });
-
-  return formattedData;
-};
 
 const AchievementList = ({ dataList }) => {
   return (
