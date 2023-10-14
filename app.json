@@ -5,7 +5,12 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "214f29fe-1b4a-431f-9961-941909470d7c"
+      }
+    }
   },
   "name": "tgaa-stats-app"
 }

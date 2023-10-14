@@ -1,9 +1,8 @@
 const steamGameID = 1158850;
-const apiKey = '9C744478D34930318FB5C67B3613E409';
 
 const apiAddresses = {
-  achievementNames: `http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v0002/?key=${apiKey}&appid=${steamGameID}&l=english&format=json`,
-  achievementPercentages: `http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=${steamGameID}&format=json`,
+  achievementNames: `https://corsproxy.io/?https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v0002/?key=5D11ACA4E02BD8C39DE0125B15906AA2&appid=${steamGameID}&l=english&format=json`,
+  achievementPercentages: `https://corsproxy.io/?https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=${steamGameID}&format=json`,
 };
 
 async function fetchData(apiUrl) {
@@ -26,9 +25,32 @@ export const getFormattedAchievements = async () => {
   const info = await fetchData(apiAddresses.achievementNames);
   const percentages = await fetchData(apiAddresses.achievementPercentages);
 
-  const formattedData = info.game.availableGameStats.achievements.map((item, index) => {
-    return { ...item, percent: percentages.achievementpercentages.achievements[index].percent };
+  return mergeArrays(info.game.availableGameStats.achievements, percentages.achievementpercentages.achievements);
+};
+
+// Merge the two returned arrays according to their name properties.
+// The Steam API does not return the achievements in the same order for both calls.
+const mergeArrays = (array1, array2) => {
+  const mergedArray = [];
+
+  // Create a map from array2 for faster lookup
+  const map = new Map();
+  array2.forEach((item) => {
+    map.set(item.name, item.percent);
   });
 
-  return formattedData;
+  // Merge array1 with values from array2 based on matching 'name'
+  array1.forEach((item1) => {
+    const item2Percent = map.get(item1.name);
+    if (item2Percent !== undefined) {
+      mergedArray.push({
+        ...item1,
+        percent: item2Percent,
+      });
+    } else {
+      mergedArray.push(item1);
+    }
+  });
+
+  return mergedArray;
 };
